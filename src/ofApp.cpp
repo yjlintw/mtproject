@@ -1,5 +1,14 @@
 #include "ofApp.h"
 
+//----------- TODO --------------
+// 1. Camera Calibration
+// 2. Projection Calibration / Mapping
+// 3. Communication between OF and Unity
+//      a. Design Protocol
+//      b. Implement
+// 4. Make settings as a text file (Save / Load)
+// 
+
 //--------------------------------------------------------------
 void ofApp::setup(){
     // OpenFrameworks setup
