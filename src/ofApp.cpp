@@ -14,7 +14,6 @@ void ofApp::setup(){
     // OpenFrameworks setup
     ofSetFrameRate(60);
     KinectSetup();
-
     //
     readyToDraw = false;
     recordBackground = false;
@@ -25,8 +24,10 @@ void ofApp::setup(){
     avgImage.allocate(640,480, ofImageType::OF_IMAGE_GRAYSCALE);
     diffImage.allocate(640,480, ofImageType::OF_IMAGE_GRAYSCALE);
     fingerImage.allocate(640,480, ofImageType::OF_IMAGE_GRAYSCALE);
-    fidImage.allocate(640,480, ofImageType::OF_IMAGE_GRAYSCALE);
-
+    fidImage.allocate(640,480, ofImageType::OF_IMAGE_GRAYSCALE); 
+    
+    
+    
 
     blobThreshold = 30;
     imageThreshold = 10;
