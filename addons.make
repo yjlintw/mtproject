@@ -4,3 +4,4 @@ ofxNetwork
 ofxCv
 ofxBlobTracker
 ofxFiducialFinder
+ofxSyphon

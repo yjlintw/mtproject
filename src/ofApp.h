@@ -6,7 +6,7 @@
 #include "ofxCv.h"
 #include "ofxBlobTracker.h"
 #include "ofxFidMain.h"
-
+#include "ofxSyphon.h"
 
 class ofApp : public ofBaseApp{
 	public:
@@ -57,5 +57,10 @@ class ofApp : public ofBaseApp{
         void KinectSetup();
         void ImageProcessing();
         void UpdateBackground(const cv::Mat& input, cv::Mat &avg);
+
+
+        // ofxSyphon
+        ofxSyphonServer mainOutputSyphonServer;
+        ofxSyphonClient mClient;
         
 };

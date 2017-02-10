@@ -43,6 +43,13 @@ void ofApp::setup(){
     fidfinder.maxFingerSize = 100;
     fidfinder.minFingerSize = 1;
     fidfinder.fingerSensitivity = 0.05f;
+    
+    // Syphon
+    mainOutputSyphonServer.setName("Screen Output");
+    
+    mClient.setup();
+    mClient.set("", "Simple Server");
+    
 }
 
 //--------------------------------------------------------------
@@ -148,7 +155,10 @@ void ofApp::draw(){
             }
         }
     }
-
+    
+    // Syphon
+    mClient.draw(50, 50);
+    mainOutputSyphonServer.publishScreen();
 }
 
 //--------------------------------------------------------------
