@@ -90,6 +90,9 @@ gradlew.bat
 *.pro.user
 *.pri
 
+# VSCode
+.vscode/
+
 
 #########################
 # operating system
