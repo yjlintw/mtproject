@@ -302,6 +302,8 @@
 		E74E98251E4D62DA00A0EBD4 /* ofxBlobTracker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ofxBlobTracker.cpp; path = ../../../addons/ofxBlobTracker/src/ofxBlobTracker.cpp; sourceTree = "<group>"; };
 		E74E98261E4D62DA00A0EBD4 /* ofxContourFinder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ofxContourFinder.cpp; path = ../../../addons/ofxBlobTracker/src/ofxContourFinder.cpp; sourceTree = "<group>"; };
 		E798C88F1A0E2511E1756CE0 /* cuda_devptrs.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = cuda_devptrs.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/core/cuda_devptrs.hpp; sourceTree = SOURCE_ROOT; };
+		E79C74CF1E60CD2E00FC7AA4 /* finger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = finger.h; sourceTree = "<group>"; };
+		E79C74D01E60CD2E00FC7AA4 /* marker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = marker.h; sourceTree = "<group>"; };
 		E7DDB716B5AE0DEA82DFFEDA /* autotuned_index.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = autotuned_index.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/autotuned_index.h; sourceTree = SOURCE_ROOT; };
 		E8AF1E9150AD818FA9D9195D /* version.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = version.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/core/version.hpp; sourceTree = SOURCE_ROOT; };
 		E90542C149C83316678AB011 /* cxmisc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = cxmisc.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv/cxmisc.h; sourceTree = SOURCE_ROOT; };
@@ -844,6 +846,7 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				E79C74CE1E60CD2E00FC7AA4 /* Trackers */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
@@ -866,6 +869,15 @@
 				E7063ACE1E4D5C9B005CB480 /* Syphon.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E79C74CE1E60CD2E00FC7AA4 /* Trackers */ = {
+			isa = PBXGroup;
+			children = (
+				E79C74CF1E60CD2E00FC7AA4 /* finger.h */,
+				E79C74D01E60CD2E00FC7AA4 /* marker.h */,
+			);
+			path = Trackers;
 			sourceTree = "<group>";
 		};
 		ED6E9BDB447DB965EE6F1FA6 /* src */ = {

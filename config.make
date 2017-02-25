@@ -105,7 +105,7 @@
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-PROJECT_CFLAGS = -F/Users/peacedove/Documents/Code/OF/openFrameworks/addons/ofxSyphon/libs/Syphon/lib/osx -framework Foundation -framework Syphon -I/Users/peacedove/Documents/Code/OF/openFrameworks/addons/ofxSyphon/libs/Syphon/lib/osx/Syphon.framework/Headers -I/User/peacedove/Documents/Code/OF/openFrameworks/addons/ofxSyphon/libs/Syphon/src
+# PROJECT_CFLAGS = -F/Users/peacedove/Documents/Code/OF/openFrameworks/addons/ofxSyphon/libs/Syphon/lib/osx -framework Foundation -framework Syphon -I/Users/peacedove/Documents/Code/OF/openFrameworks/addons/ofxSyphon/libs/Syphon/lib/osx/Syphon.framework/Headers -I/User/peacedove/Documents/Code/OF/openFrameworks/addons/ofxSyphon/libs/Syphon/src
 
 ################################################################################
 # PROJECT OPTIMIZATION CFLAGS

@@ -1,5 +1,6 @@
 #include "ofApp.h"
 
+
 //----------- TODO --------------
 // 1. Camera Calibration
 // 2. Projection Calibration / Mapping
@@ -25,15 +26,30 @@ void ofApp::setup(){
     diffImage.allocate(640,480, ofImageType::OF_IMAGE_GRAYSCALE);
     fingerImage.allocate(640,480, ofImageType::OF_IMAGE_GRAYSCALE);
     fidImage.allocate(640,480, ofImageType::OF_IMAGE_GRAYSCALE); 
-    
-    
+
+    // Camera Calibration
+    // TODO:: Currently the calibration points is fixed size;
+    calibrationPoints[1] = cv::Point2f(0, 0);
+    calibrationPoints[0] = cv::Point2f(ofGetWidth(), 0);
+    calibrationPoints[3] = cv::Point2f(ofGetWidth(), ofGetHeight());
+    calibrationPoints[2] = cv::Point2f(0, ofGetHeight());
+
+    cameraPoints[0] = cv::Point2f(0, 0);
+    cameraPoints[1] = cv::Point2f(640, 0);
+    cameraPoints[2] = cv::Point2f(640, 480);
+    cameraPoints[3] = cv::Point2f(0, 480);
+    for (int i = 0; i < 4; i++) {
+        pointsSet[i] = false;
+    }
+
+    warpMat = cv::Mat(2, 3, CV_32FC1);
+    debugPoint = cv::Point2f(-1, -1);
     
 
     blobThreshold = 30;
     imageThreshold = 10;
     fingerSizeThreshold = 0.065;
     fingerSizeLowerThreshold = 0.015;
-
     ofAddListener(blobTracker.blobAdded, this, &ofApp::blobAdded);
     ofAddListener(blobTracker.blobMoved, this, &ofApp::blobMoved);
     ofAddListener(blobTracker.blobDeleted, this, &ofApp::blobDeleted);
@@ -68,6 +84,8 @@ void ofApp::update(){
     }
 
     ImageProcessing();
+    updateBlobTracker();
+    updateFidMarker();
 
 }
 
@@ -95,70 +113,118 @@ void ofApp::draw(){
     // kinect view
     // kinect.draw(0,0,800,600);
     if (readyToDraw) {
-        irImage.draw(0, 0, 640, 480);
-        if (matReady) {
-            avgImage.draw(0, 480, 400, 300);
-            diffImage.draw(640, 0, 400, 300);
-            fingerImage.draw(640, 300, 400, 300);
-            fidImage.draw(640, 600, 400, 300);
-            // draw block tracker
-            blobTracker.draw(0,0, 640, 480);
-            for (int i = 0; i < blobTracker.size(); i++) {
-                // if (!blobTracker[i].isCircular()) {
-                //     continue;
-                // }
-                float rectRatio = blobTracker[i].boundingRect.width / blobTracker[i].boundingRect.height;
-                std::cout << rectRatio << std::endl;
-                // if (rectRatio > 1.5 || rectRatio < 0.5) {
-                //     continue;
-                // } 
-                if (blobTracker[i].boundingRect.width > fingerSizeThreshold || blobTracker[i].boundingRect.height > fingerSizeThreshold) {
-                    continue;
-                }
-
-                if (blobTracker[i].boundingRect.width < fingerSizeLowerThreshold || blobTracker[i].boundingRect.height < fingerSizeLowerThreshold) {
-                    continue;
-                }
-                ofFill();
-                ofSetColor(255, 0, 0);
-                ofCircle(blobTracker[i].centroid.x * 640,
-                 blobTracker[i].centroid.y * 480,
-                 10);
-                
-                ofSetColor(0);
-                ofDrawBitmapString(ofToString( blobTracker[i].id ),
-                           blobTracker[i].centroid.x * 640,
-                           blobTracker[i].centroid.y * 480);
-            }
-            
-            // get fiducial info
-            for (list<ofxFiducial>::iterator fiducial = fidfinder.fiducialsList.begin(); fiducial != fidfinder.fiducialsList.end(); fiducial++) {
-                fiducial->draw(0, 0);
-                fiducial->drawCorners(0,0);
-                ofSetColor(0, 255, 0);
-                ofDrawBitmapString("a: " + ofToString(fiducial->getAngleDeg(),2), fiducial->getX(), fiducial->getY() + 8);
-                ofDrawBitmapString("s: " + ofToString(fiducial->getRootSize(),2), fiducial->getX(), fiducial->getY() + 16);
-                ofSetColor(0, 0, 255);
-                if (fiducial->isPointInside(mouseX, mouseY)) {
-                    ofFill();
-                } else {
-                    ofNoFill();
-                }
-                ofCircle(mouseX, mouseY, 10);
-                ofSetColor(255,255,255);
-
-            }
-            
-            // get finger
-            for (list<ofxFinger>::iterator finger = fidfinder.fingersList.begin(); finger != fidfinder.fingersList.end(); finger++) {
-                finger->draw(0,0);
-            }
+        drawCameraViews();
+        drawMarkers();
+        drawFingers();
+        //draw the fingers
+        for (list<ofxFinger>::iterator finger = fidfinder.fingersList.begin(); finger != fidfinder.fingersList.end(); finger++) {
+            finger->draw(20, 20);
         }
     }
+
+    drawCalibrationPoints();
     
     // Syphon
     mClient.draw(50, 50);
     mainOutputSyphonServer.publishScreen();
+}
+
+//--------------------------------------------------------------
+
+
+// Draw Methods
+void ofApp::drawCameraViews() {
+    irImage.draw(0, 0, 640, 480);
+    if (matReady) {
+        avgImage.draw(0, 480, 400, 300);
+        diffImage.draw(640, 0, 400, 300);
+        fingerImage.draw(640, 300, 400, 300);
+        fidImage.draw(640, 600, 400, 300);
+    }
+}
+
+void ofApp::drawMarkers() {
+    if (matReady) {
+        for (auto marker : markers) {
+            ofPolyline line;
+            line.addVertex(marker.corners[0].x, marker.corners[0].y);
+            line.addVertex(marker.corners[1].x, marker.corners[1].y);
+            line.addVertex(marker.corners[2].x, marker.corners[2].y);
+            line.addVertex(marker.corners[3].x, marker.corners[3].y);
+            line.close();
+            ofSetColor(255, 255, 0);
+            line.draw();
+            ofDrawCircle(marker.center.x, marker.center.y, 100);
+        }
+    }
+}
+
+void ofApp::drawFingers() {
+    if (matReady) {
+        // draw block tracker
+        blobTracker.draw(0,0, 640, 480);
+        
+        // draw fingers on camera view;
+        for (auto finger_cv : fingerPoints_cv) {
+            ofFill();
+            ofSetColor(255, 0, 0);
+            ofDrawCircle(finger_cv.x, finger_cv.y, 10);
+            
+            ofSetColor(0);
+            ofDrawBitmapString(ofToString(finger_cv.getId()), finger_cv.x, finger_cv.y);
+            
+        }
+
+        // From Camera View to Projector View
+        if (!fingerPoints.empty() && calibrationDone) {
+            ofSetColor(255, 255, 0);
+            for (auto finger : fingerPoints) {
+                ofDrawCircle(finger.x, finger.y, 10);
+                ofDrawBitmapString(ofToString(finger.getId()), finger.x, finger.y);
+            }
+        }
+    }
+}
+
+void ofApp::drawCalibrationPoints() {
+    // Calibration debug info
+#ifdef DEBUG
+    if(calibrationDone) {
+        cv::Point2f transformedPt = cv::Point2f(0, 0);
+        std::vector<cv::Point2f> vec {debugPoint};
+        cv::transform(vec, vec, warpMat);
+        ofSetColor(255, 255, 0);
+        ofDrawCircle(vec[0].x, vec[0].y, 5);
+    }
+    
+    
+    if (debugPoint.x >= 0 && debugPoint.y >= 0) {
+        ofSetColor(255, 0, 255);
+        ofDrawCircle(debugPoint.x, debugPoint.y, 5);
+    }
+#endif
+    
+    // Corner Points : Reference Points (Fixed)
+    for (int i = 0; i < 4; i++) {
+        ofSetColor(200, 200, 200);
+        cv::Point2f&& p = static_cast<cv::Point2f&&>(calibrationPoints[i]);
+        ofDrawCircle(p.x, p.y, 10);
+        ofSetColor(255, 255, 255);
+        ofDrawBitmapString("p" + std::to_string(i), p.x, p.y);
+    }
+    
+    // Corner Points : Camera Points (Adjustable)
+    for (int i = 0; i < 4; i++) {
+        if (pointsSet[i]) {
+            ofSetColor(255, 200, 200);
+        } else {
+            ofSetColor(100, 100, 255);
+        }
+        cv::Point2f&& p = static_cast<cv::Point2f&&>(cameraPoints[i]);
+        ofDrawCircle(p.x, p.y, 10);
+        ofSetColor(255, 255, 255);
+        ofDrawBitmapString("c" + std::to_string(i), p.x, p.y);
+    }
 }
 
 //--------------------------------------------------------------
@@ -205,6 +271,9 @@ void ofApp::keyPressed(int key){
             fingerSizeLowerThreshold+=0.001;
             if (fingerSizeLowerThreshold > 1) fingerSizeLowerThreshold = 1;
             break;
+        case 'c':
+            setCalibrationPoint();
+            break;
 ;
     }
 }
@@ -226,7 +295,23 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
+    switch(button) {
+        case 0:
 
+        if (calibrationMode && currentCalibrationPt < 4) {
+            cameraPoints[currentCalibrationPt].x = x;
+            cameraPoints[currentCalibrationPt].y = y;
+            pointsSet[currentCalibrationPt] = true;
+            currentCalibrationPt++;
+        } else {
+            debugPoint.x = x;
+            debugPoint.y = y;
+        }
+
+        break;
+        default:
+        break;
+    }
 }
 
 //--------------------------------------------------------------
@@ -286,6 +371,19 @@ void ofApp::ImageProcessing() {
     if (recordBackground) {
         UpdateBackground(irMat, avgMat);
         matReady = true;
+    } else if (calibrationMode) {
+        // calibration mode
+        // Get Four Points;
+        if (currentCalibrationPt < 4) {
+
+        } else {
+            warpMat = cv::getAffineTransform( cameraPoints, calibrationPoints );
+            calibrationMode = false;
+            calibrationDone = true;
+        }
+        // Get Transformation Matrix
+        
+        
     } else {
         if (matReady) {
             ofxCv::absdiff(avgMat, irMat, diffMat);
@@ -322,15 +420,98 @@ void ofApp::ImageProcessing() {
 }
 
 
+void ofApp::updateBlobTracker() {
+    if (matReady) {
+        fingerPoints_cv.clear();
+        fingerPoints.clear();
+        std::vector<cv::Point2f> fingersTmp;
+        
+        // From blobTracker to Camera View
+        for (int i = 0; i < blobTracker.size(); i++) {
+            float pt_x = blobTracker[i].centroid.x * 640.0f;
+            float pt_y = blobTracker[i].centroid.y * 480.0f;
+            if (blobTracker[i].boundingRect.width > fingerSizeThreshold || blobTracker[i].boundingRect.height > fingerSizeThreshold) {
+                continue;
+            }
+            
+            if (blobTracker[i].boundingRect.width < fingerSizeLowerThreshold || blobTracker[i].boundingRect.height < fingerSizeLowerThreshold) {
+                continue;
+            }
+            fingerPoints.push_back(YJ::Finger{ pt_x, pt_y, blobTracker[i].id });
+            fingerPoints_cv.push_back(YJ::Finger{ pt_x, pt_y, blobTracker[i].id });
+            fingersTmp.push_back(YJ::Finger{ pt_x, pt_y, blobTracker[i].id });
+        }
+        
+        
+        
+        
+        // From Camera View to Projector View
+        if (!fingerPoints.empty() && calibrationDone) {
+            cv::transform(fingersTmp, fingersTmp, warpMat);
+            
+            for (int i = 0; i < fingerPoints.size(); i++) {
+                cv::Point2f point = fingersTmp[i];
+                fingerPoints[i].x = point.x;
+                fingerPoints[i].y = point.y;
+            }
+        }
+    }
+
+    
+}
+
+
+void ofApp::updateFidMarker() {
+    // get fiducial info
+    if (calibrationDone) {
+        markers.clear();
+        for (list<ofxFiducial>::iterator fiducial = fidfinder.fiducialsList.begin(); fiducial != fidfinder.fiducialsList.end(); fiducial++) {
+            fiducial->computeCorners();
+            
+            std::vector<cv::Point2f> corners;
+            corners.push_back(cv::Point2f(fiducial->cornerPoints[0].x, fiducial->cornerPoints[0].y));
+            corners.push_back(cv::Point2f(fiducial->cornerPoints[1].x, fiducial->cornerPoints[1].y));
+            corners.push_back(cv::Point2f(fiducial->cornerPoints[2].x, fiducial->cornerPoints[2].y));
+            corners.push_back(cv::Point2f(fiducial->cornerPoints[3].x, fiducial->cornerPoints[3].y));
+            corners.push_back(cv::Point2f(fiducial->getX(), fiducial->getY()));
+            
+            
+            cv::transform(corners, corners, warpMat);
+            
+            cv::Point2f t_center = corners.back();
+            corners.pop_back();
+            YJ::Marker newMarker {corners, t_center, fiducial->getAngleDeg(), fiducial->fidId};
+            markers.push_back(newMarker);
+        }
+    }
+}
+
 // Blob Tracker
 void ofApp::blobAdded(ofxBlob &_blob){
+#ifdef DEBUG
     ofLog(OF_LOG_NOTICE, "Blob ID " + ofToString(_blob.id) + " added" );
+#endif
 }
 
 void ofApp::blobMoved(ofxBlob &_blob){
+#ifdef DEBUG
     ofLog(OF_LOG_NOTICE, "Blob ID " + ofToString(_blob.id) + " moved" );
+#endif
 }
 
 void ofApp::blobDeleted(ofxBlob &_blob){
+#ifdef DEBUG
     ofLog(OF_LOG_NOTICE, "Blob ID " + ofToString(_blob.id) + " deleted" );
+#endif
+}
+
+
+// calibration
+void ofApp::setCalibrationPoint() {
+    calibrationMode = true;
+    currentCalibrationPt = 0;
+    for (int i = 0; i < 4; i++) {
+        pointsSet[i] = false;
+    }
+
 }

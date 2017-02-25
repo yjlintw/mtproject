@@ -1,14 +1,14 @@
 import os
 import ycm_core
 from clang_helpers import PrepareClangFlags
- 
+
 # Set this to the absolute path to the folder (NOT the file!) containing the
 # compile_commands.json file to use that instead of 'flags'. See here for
 # more details: http://clang.llvm.org/docs/JSONCompilationDatabase.html
 # Most projects will NOT need to set this to anything; you can just change the
 # 'flags' list of compilation flags. Notice that YCM itself uses that approach.
 compilation_database_folder = ''
- 
+
 # These are the compilation flags that will be used in case there's no
 # compilation database set.
 flags = [
