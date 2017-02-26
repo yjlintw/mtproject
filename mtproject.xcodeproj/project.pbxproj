@@ -25,11 +25,9 @@
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
 		E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */; };
 		E55DEEF784A10419E444669E /* flags.c in Sources */ = {isa = PBXBuildFile; fileRef = 682082DEC78C75C8FB18B7DB /* flags.c */; };
-		E74E97F61E4D608300A0EBD4 /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7063ACE1E4D5C9B005CB480 /* Syphon.framework */; };
 		E74E97F71E4D608300A0EBD4 /* Syphon.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E7063ACE1E4D5C9B005CB480 /* Syphon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E79C769F1E62443400FC7AA4 /* ofxBlobTracker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E79C74DF1E62443400FC7AA4 /* ofxBlobTracker.cpp */; };
 		E79C76A01E62443400FC7AA4 /* ofxContourFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E79C74E11E62443400FC7AA4 /* ofxContourFinder.cpp */; };
-		E79C76D31E62443400FC7AA4 /* GeometryHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E79C75AC1E62443400FC7AA4 /* GeometryHelpers.cpp */; };
 		E79C76E41E62443400FC7AA4 /* ETF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E79C75F01E62443400FC7AA4 /* ETF.cpp */; };
 		E79C76E51E62443400FC7AA4 /* fdog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E79C75F11E62443400FC7AA4 /* fdog.cpp */; };
 		E79C76E61E62443400FC7AA4 /* Calibration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E79C76021E62443400FC7AA4 /* Calibration.cpp */; };
@@ -43,7 +41,6 @@
 		E79C76EE1E62443400FC7AA4 /* Tracker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E79C760A1E62443400FC7AA4 /* Tracker.cpp */; };
 		E79C76EF1E62443400FC7AA4 /* Utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E79C760B1E62443400FC7AA4 /* Utilities.cpp */; };
 		E79C76F01E62443400FC7AA4 /* Wrappers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E79C760C1E62443400FC7AA4 /* Wrappers.cpp */; };
-		E79C76F11E62443400FC7AA4 /* license.md in Sources */ = {isa = PBXBuildFile; fileRef = E79C760D1E62443400FC7AA4 /* license.md */; };
 		E79C76F71E62443400FC7AA4 /* fidtrackX.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E79C76251E62443400FC7AA4 /* fidtrackX.cpp */; };
 		E79C76F81E62443400FC7AA4 /* segment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E79C76281E62443400FC7AA4 /* segment.cpp */; };
 		E79C76F91E62443400FC7AA4 /* treeidmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E79C762A1E62443400FC7AA4 /* treeidmap.cpp */; };
@@ -54,6 +51,8 @@
 		E79C77151E62443400FC7AA4 /* ofxSyphonClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = E79C76971E62443400FC7AA4 /* ofxSyphonClient.mm */; };
 		E79C77161E62443400FC7AA4 /* ofxSyphonServer.mm in Sources */ = {isa = PBXBuildFile; fileRef = E79C76991E62443400FC7AA4 /* ofxSyphonServer.mm */; };
 		E79C77171E62443400FC7AA4 /* ofxSyphonServerDirectory.mm in Sources */ = {isa = PBXBuildFile; fileRef = E79C769B1E62443400FC7AA4 /* ofxSyphonServerDirectory.mm */; };
+		E79C77A41E62493600FC7AA4 /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E79C77911E62493600FC7AA4 /* jsoncpp.cpp */; };
+		E79C77A71E62493600FC7AA4 /* ofxJSONElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E79C77961E62493600FC7AA4 /* ofxJSONElement.cpp */; };
 		F4135EEFC911E9ED211FB6F9 /* core.c in Sources */ = {isa = PBXBuildFile; fileRef = CF528C0E8DBFF5C31E8D6529 /* core.c */; };
 		FB09C6B2A1DA0EA217240CB8 /* ofxCvGrayscaleImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 057122A817D12571F8C0C7A4 /* ofxCvGrayscaleImage.cpp */; };
 		FCC16AB16073FF0581F50ED7 /* loader.c in Sources */ = {isa = PBXBuildFile; fileRef = FE25F20F363BC625B852BFBC /* loader.c */; };
@@ -566,6 +565,42 @@
 		E79C76991E62443400FC7AA4 /* ofxSyphonServer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ofxSyphonServer.mm; sourceTree = "<group>"; };
 		E79C769A1E62443400FC7AA4 /* ofxSyphonServerDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSyphonServerDirectory.h; sourceTree = "<group>"; };
 		E79C769B1E62443400FC7AA4 /* ofxSyphonServerDirectory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ofxSyphonServerDirectory.mm; sourceTree = "<group>"; };
+		E79C77641E62493600FC7AA4 /* .gitattributes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
+		E79C77651E62493600FC7AA4 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		E79C77661E62493600FC7AA4 /* addon_config.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = addon_config.mk; sourceTree = "<group>"; };
+		E79C77681E62493600FC7AA4 /* addons.make */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = addons.make; sourceTree = "<group>"; };
+		E79C776B1E62493600FC7AA4 /* example.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = example.json; sourceTree = "<group>"; };
+		E79C776C1E62493600FC7AA4 /* config.make */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.make; sourceTree = "<group>"; };
+		E79C776D1E62493600FC7AA4 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		E79C776F1E62493600FC7AA4 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		E79C77701E62493600FC7AA4 /* ofApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofApp.cpp; sourceTree = "<group>"; };
+		E79C77711E62493600FC7AA4 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofApp.h; sourceTree = "<group>"; };
+		E79C77731E62493600FC7AA4 /* addons.make */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = addons.make; sourceTree = "<group>"; };
+		E79C77741E62493600FC7AA4 /* config.make */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.make; sourceTree = "<group>"; };
+		E79C77751E62493600FC7AA4 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		E79C77771E62493600FC7AA4 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		E79C77781E62493600FC7AA4 /* ofApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofApp.cpp; sourceTree = "<group>"; };
+		E79C77791E62493600FC7AA4 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofApp.h; sourceTree = "<group>"; };
+		E79C777B1E62493600FC7AA4 /* addons.make */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = addons.make; sourceTree = "<group>"; };
+		E79C777C1E62493600FC7AA4 /* config.make */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.make; sourceTree = "<group>"; };
+		E79C777D1E62493600FC7AA4 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		E79C777F1E62493600FC7AA4 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		E79C77801E62493600FC7AA4 /* ofApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofApp.cpp; sourceTree = "<group>"; };
+		E79C77811E62493600FC7AA4 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofApp.h; sourceTree = "<group>"; };
+		E79C77831E62493600FC7AA4 /* addons.make */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = addons.make; sourceTree = "<group>"; };
+		E79C77841E62493600FC7AA4 /* config.make */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.make; sourceTree = "<group>"; };
+		E79C77851E62493600FC7AA4 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		E79C77871E62493600FC7AA4 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		E79C77881E62493600FC7AA4 /* ofApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofApp.cpp; sourceTree = "<group>"; };
+		E79C77891E62493600FC7AA4 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofApp.h; sourceTree = "<group>"; };
+		E79C778E1E62493600FC7AA4 /* json-forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "json-forwards.h"; sourceTree = "<group>"; };
+		E79C778F1E62493600FC7AA4 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		E79C77911E62493600FC7AA4 /* jsoncpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsoncpp.cpp; sourceTree = "<group>"; };
+		E79C77921E62493600FC7AA4 /* license.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = license.md; sourceTree = "<group>"; };
+		E79C77931E62493600FC7AA4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E79C77951E62493600FC7AA4 /* ofxJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxJSON.h; sourceTree = "<group>"; };
+		E79C77961E62493600FC7AA4 /* ofxJSONElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxJSONElement.cpp; sourceTree = "<group>"; };
+		E79C77971E62493600FC7AA4 /* ofxJSONElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxJSONElement.h; sourceTree = "<group>"; };
 		E7DDB716B5AE0DEA82DFFEDA /* autotuned_index.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = autotuned_index.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/autotuned_index.h; sourceTree = SOURCE_ROOT; };
 		E8AF1E9150AD818FA9D9195D /* version.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = version.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/core/version.hpp; sourceTree = SOURCE_ROOT; };
 		E90542C149C83316678AB011 /* cxmisc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = cxmisc.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv/cxmisc.h; sourceTree = SOURCE_ROOT; };
@@ -595,7 +630,6 @@
 			files = (
 				E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */,
 				E79C77121E62443400FC7AA4 /* Syphon.framework in Frameworks */,
-				E74E97F61E4D608300A0EBD4 /* Syphon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -958,6 +992,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				E79C77631E62493600FC7AA4 /* ofxJSON */,
 				E79C74D11E62443400FC7AA4 /* ofxBlobTracker */,
 				E79C74E31E62443400FC7AA4 /* ofxCv */,
 				E79C76131E62443400FC7AA4 /* ofxFiducialFinder */,
@@ -2456,6 +2491,178 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		E79C77631E62493600FC7AA4 /* ofxJSON */ = {
+			isa = PBXGroup;
+			children = (
+				E79C77641E62493600FC7AA4 /* .gitattributes */,
+				E79C77651E62493600FC7AA4 /* .gitignore */,
+				E79C77661E62493600FC7AA4 /* addon_config.mk */,
+				E79C77671E62493600FC7AA4 /* example_file_read_write */,
+				E79C77721E62493600FC7AA4 /* example_flickr */,
+				E79C777A1E62493600FC7AA4 /* example_nytimes */,
+				E79C77821E62493600FC7AA4 /* example_twitter */,
+				E79C778A1E62493600FC7AA4 /* libs */,
+				E79C77921E62493600FC7AA4 /* license.md */,
+				E79C77931E62493600FC7AA4 /* README.md */,
+				E79C77941E62493600FC7AA4 /* src */,
+			);
+			name = ofxJSON;
+			path = ../../../addons/ofxJSON;
+			sourceTree = "<group>";
+		};
+		E79C77671E62493600FC7AA4 /* example_file_read_write */ = {
+			isa = PBXGroup;
+			children = (
+				E79C77681E62493600FC7AA4 /* addons.make */,
+				E79C77691E62493600FC7AA4 /* bin */,
+				E79C776C1E62493600FC7AA4 /* config.make */,
+				E79C776D1E62493600FC7AA4 /* Makefile */,
+				E79C776E1E62493600FC7AA4 /* src */,
+			);
+			path = example_file_read_write;
+			sourceTree = "<group>";
+		};
+		E79C77691E62493600FC7AA4 /* bin */ = {
+			isa = PBXGroup;
+			children = (
+				E79C776A1E62493600FC7AA4 /* data */,
+			);
+			path = bin;
+			sourceTree = "<group>";
+		};
+		E79C776A1E62493600FC7AA4 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				E79C776B1E62493600FC7AA4 /* example.json */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		E79C776E1E62493600FC7AA4 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E79C776F1E62493600FC7AA4 /* main.cpp */,
+				E79C77701E62493600FC7AA4 /* ofApp.cpp */,
+				E79C77711E62493600FC7AA4 /* ofApp.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		E79C77721E62493600FC7AA4 /* example_flickr */ = {
+			isa = PBXGroup;
+			children = (
+				E79C77731E62493600FC7AA4 /* addons.make */,
+				E79C77741E62493600FC7AA4 /* config.make */,
+				E79C77751E62493600FC7AA4 /* Makefile */,
+				E79C77761E62493600FC7AA4 /* src */,
+			);
+			path = example_flickr;
+			sourceTree = "<group>";
+		};
+		E79C77761E62493600FC7AA4 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E79C77771E62493600FC7AA4 /* main.cpp */,
+				E79C77781E62493600FC7AA4 /* ofApp.cpp */,
+				E79C77791E62493600FC7AA4 /* ofApp.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		E79C777A1E62493600FC7AA4 /* example_nytimes */ = {
+			isa = PBXGroup;
+			children = (
+				E79C777B1E62493600FC7AA4 /* addons.make */,
+				E79C777C1E62493600FC7AA4 /* config.make */,
+				E79C777D1E62493600FC7AA4 /* Makefile */,
+				E79C777E1E62493600FC7AA4 /* src */,
+			);
+			path = example_nytimes;
+			sourceTree = "<group>";
+		};
+		E79C777E1E62493600FC7AA4 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E79C777F1E62493600FC7AA4 /* main.cpp */,
+				E79C77801E62493600FC7AA4 /* ofApp.cpp */,
+				E79C77811E62493600FC7AA4 /* ofApp.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		E79C77821E62493600FC7AA4 /* example_twitter */ = {
+			isa = PBXGroup;
+			children = (
+				E79C77831E62493600FC7AA4 /* addons.make */,
+				E79C77841E62493600FC7AA4 /* config.make */,
+				E79C77851E62493600FC7AA4 /* Makefile */,
+				E79C77861E62493600FC7AA4 /* src */,
+			);
+			path = example_twitter;
+			sourceTree = "<group>";
+		};
+		E79C77861E62493600FC7AA4 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E79C77871E62493600FC7AA4 /* main.cpp */,
+				E79C77881E62493600FC7AA4 /* ofApp.cpp */,
+				E79C77891E62493600FC7AA4 /* ofApp.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		E79C778A1E62493600FC7AA4 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				E79C778B1E62493600FC7AA4 /* jsoncpp */,
+			);
+			path = libs;
+			sourceTree = "<group>";
+		};
+		E79C778B1E62493600FC7AA4 /* jsoncpp */ = {
+			isa = PBXGroup;
+			children = (
+				E79C778C1E62493600FC7AA4 /* include */,
+				E79C77901E62493600FC7AA4 /* src */,
+			);
+			path = jsoncpp;
+			sourceTree = "<group>";
+		};
+		E79C778C1E62493600FC7AA4 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				E79C778D1E62493600FC7AA4 /* json */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		E79C778D1E62493600FC7AA4 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				E79C778E1E62493600FC7AA4 /* json-forwards.h */,
+				E79C778F1E62493600FC7AA4 /* json.h */,
+			);
+			path = json;
+			sourceTree = "<group>";
+		};
+		E79C77901E62493600FC7AA4 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E79C77911E62493600FC7AA4 /* jsoncpp.cpp */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		E79C77941E62493600FC7AA4 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E79C77951E62493600FC7AA4 /* ofxJSON.h */,
+				E79C77961E62493600FC7AA4 /* ofxJSONElement.cpp */,
+				E79C77971E62493600FC7AA4 /* ofxJSONElement.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
 		ED6E9BDB447DB965EE6F1FA6 /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -2645,6 +2852,7 @@
 				E79C76FB1E62443400FC7AA4 /* ofxFiducialTracker.cpp in Sources */,
 				E79C76FA1E62443400FC7AA4 /* ofxFiducialFinder.cpp in Sources */,
 				E79C77151E62443400FC7AA4 /* ofxSyphonClient.mm in Sources */,
+				E79C77A71E62493600FC7AA4 /* ofxJSONElement.cpp in Sources */,
 				E79C77161E62443400FC7AA4 /* ofxSyphonServer.mm in Sources */,
 				E79C76E81E62443400FC7AA4 /* Distance.cpp in Sources */,
 				E79C76F71E62443400FC7AA4 /* fidtrackX.cpp in Sources */,
@@ -2652,6 +2860,7 @@
 				E79C76F91E62443400FC7AA4 /* treeidmap.cpp in Sources */,
 				E79C77131E62443400FC7AA4 /* SyphonNameboundClient.m in Sources */,
 				E79C76F01E62443400FC7AA4 /* Wrappers.cpp in Sources */,
+				E79C77A41E62493600FC7AA4 /* jsoncpp.cpp in Sources */,
 				E79C76E91E62443400FC7AA4 /* Flow.cpp in Sources */,
 				E79C76EF1E62443400FC7AA4 /* Utilities.cpp in Sources */,
 				E79C77171E62443400FC7AA4 /* ofxSyphonServerDirectory.mm in Sources */,
@@ -2679,13 +2888,11 @@
 				E79C76EC1E62443400FC7AA4 /* ObjectFinder.cpp in Sources */,
 				1D5F3298C2FA073628012944 /* ofxCvContourFinder.cpp in Sources */,
 				169D3C72FDE6C5590A1616F5 /* ofxCvFloatImage.cpp in Sources */,
-				E79C76F11E62443400FC7AA4 /* license.md in Sources */,
 				FB09C6B2A1DA0EA217240CB8 /* ofxCvGrayscaleImage.cpp in Sources */,
 				E212C821D1064B92DD953A42 /* ofxCvHaarFinder.cpp in Sources */,
 				63020F16C7E8DED980111241 /* ofxCvImage.cpp in Sources */,
 				E79C76E51E62443400FC7AA4 /* fdog.cpp in Sources */,
 				D3301F6A0B43BB293ED97C1D /* ofxCvShortImage.cpp in Sources */,
-				E79C76D31E62443400FC7AA4 /* GeometryHelpers.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2939,6 +3146,9 @@
 					../../../addons/ofxSyphon/libs/Syphon/lib/osx,
 					../../../addons/ofxSyphon/libs/Syphon,
 					../../../addons/ofxSyphon/libs,
+					../../../addons/ofxJSON/src,
+					../../../addons/ofxJSON/libs,
+					../../../addons/ofxJSON/libs/jsoncpp/include,
 				);
 				ICON = "$(ICON_NAME_DEBUG)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
@@ -3031,6 +3241,9 @@
 					../../../addons/ofxSyphon/libs/Syphon/lib/osx,
 					../../../addons/ofxSyphon/libs/Syphon,
 					../../../addons/ofxSyphon/libs,
+					../../../addons/ofxJSON/src,
+					../../../addons/ofxJSON/libs,
+					../../../addons/ofxJSON/libs/jsoncpp/include,
 				);
 				ICON = "$(ICON_NAME_RELEASE)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
