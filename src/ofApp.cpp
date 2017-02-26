@@ -481,6 +481,9 @@ void ofApp::updateFidMarker() {
             cv::Point2f t_center = corners.back();
             corners.pop_back();
             YJ::Marker newMarker {corners, t_center, fiducial->getAngleDeg(), fiducial->fidId};
+#ifdef DEBUG
+            std::cout << newMarker.toJSON().toStyledString() << std::endl;
+#endif
             markers.push_back(newMarker);
         }
     }
@@ -490,6 +493,8 @@ void ofApp::updateFidMarker() {
 void ofApp::blobAdded(ofxBlob &_blob){
 #ifdef DEBUG
     ofLog(OF_LOG_NOTICE, "Blob ID " + ofToString(_blob.id) + " added" );
+    YJ::Finger f { cv::Point2f{ _blob.centroid.x, _blob.centroid.y }, _blob.id };
+    std::cout << f.toJSON().toStyledString() << std::endl;
 #endif
 }
 
