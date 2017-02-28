@@ -407,18 +407,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }
 
-void ofApp::KinectSetup() {
-    kinect.setRegistration(false);
-    kinect.setLed(ofxKinect::LED_OFF);
 
-    kinect.init(true);
-    kinect.open();
-
-    // print the intrinsic IR sensor value
-    if (kinect.isConnected()) {
-        std::cout << "Kinect is connected" << std::endl;
-    }
-}
 
 void ofApp::UpdateBackground(const cv::Mat& input, cv::Mat& avg) {
     avg = avg * 0.8 + input * 0.2;
