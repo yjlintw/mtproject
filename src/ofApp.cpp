@@ -61,11 +61,36 @@ void ofApp::setup(){
     fidfinder.fingerSensitivity = 0.05f;
     
     // Syphon
-    mainOutputSyphonServer.setName("Screen Output");
+//    mainOutputSyphonServer.setName("Screen Output");
+//    
+//    mClient.setup();
+//    mClient.set("", "Simple Server");
     
-    mClient.setup();
-    mClient.set("", "Simple Server");
+    // UDP setup
+    udpPort = 11999;
+    networkSetup(udpPort);
     
+}
+
+//--------------------------------------------------------------
+
+void ofApp::KinectSetup() {
+    kinect.setRegistration(false);
+    kinect.setLed(ofxKinect::LED_OFF);
+    
+    kinect.init(true);
+    kinect.open();
+    
+    // print the intrinsic IR sensor value
+    if (kinect.isConnected()) {
+        std::cout << "Kinect is connected" << std::endl;
+    }
+}
+
+void ofApp::networkSetup(int port) {
+    udpConnection.Create();
+    udpConnection.Connect("127.0.0.1", port);
+    udpConnection.SetNonBlocking(true);
 }
 
 //--------------------------------------------------------------
@@ -86,7 +111,45 @@ void ofApp::update(){
     ImageProcessing();
     updateBlobTracker();
     updateFidMarker();
+    sendMsg();
+    
 
+}
+
+void ofApp::sendMsg() {
+    Json::Value root;
+    for (auto item : fingerPoints) {
+        root["fingers"][std::to_string(item.first)] = item.second.toJSON();
+    }
+    
+    for (int i = 0; i < markers.size(); i++) {
+        root["markers"][i] = markers[i].toJSON();
+    }
+    
+    if (!root.isNull()) {
+#ifdef DEBUG
+//        std::cout << root.toStyledString() << std::endl;
+#endif
+        Json::FastWriter writer;
+        std::string output = writer.write(root);
+        udpConnection.Send( output.c_str(), output.length() );
+    }
+    
+    // clear dead points
+    for (auto it = fingerPoints.begin(); it != fingerPoints.end(); ) {
+        if (it->second.getAction() == 3) {
+            it = fingerPoints.erase(it);
+        } else {
+            it++;
+        }
+    }
+    for (auto it = fingerPoints_cv.begin(); it != fingerPoints_cv.end(); ) {
+        if (it->second.getAction() == 3) {
+            it = fingerPoints_cv.erase(it);
+        } else {
+            it++;
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -125,8 +188,8 @@ void ofApp::draw(){
     drawCalibrationPoints();
     
     // Syphon
-    mClient.draw(50, 50);
-    mainOutputSyphonServer.publishScreen();
+//    mClient.draw(50, 50);
+//    mainOutputSyphonServer.publishScreen();
 }
 
 //--------------------------------------------------------------

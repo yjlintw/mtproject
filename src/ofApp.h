@@ -116,7 +116,12 @@ private:
     
     
     // ofxSyphon
-    ofxSyphonServer mainOutputSyphonServer;
-    ofxSyphonClient mClient;
+//    ofxSyphonServer mainOutputSyphonServer;
+//    ofxSyphonClient mClient;
     
+    // UDP connections
+    int udpPort;
+    ofxUDPManager udpConnection;
+    void networkSetup(int poty);
+    void sendMsg();
 };
