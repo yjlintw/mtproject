@@ -168,10 +168,10 @@ void ofApp::drawFingers() {
         for (auto finger_cv : fingerPoints_cv) {
             ofFill();
             ofSetColor(255, 0, 0);
-            ofDrawCircle(finger_cv.x, finger_cv.y, 10);
+            ofDrawCircle(finger_cv.second.x, finger_cv.second.y, 10);
             
             ofSetColor(0);
-            ofDrawBitmapString(ofToString(finger_cv.getId()), finger_cv.x, finger_cv.y);
+            ofDrawBitmapString(ofToString(finger_cv.second.getId()), finger_cv.second.x, finger_cv.second.y);
             
         }
 
@@ -179,8 +179,8 @@ void ofApp::drawFingers() {
         if (!fingerPoints.empty() && calibrationDone) {
             ofSetColor(255, 255, 0);
             for (auto finger : fingerPoints) {
-                ofDrawCircle(finger.x, finger.y, 10);
-                ofDrawBitmapString(ofToString(finger.getId()), finger.x, finger.y);
+                ofDrawCircle(finger.second.x, finger.second.y, 10);
+                ofDrawBitmapString(ofToString(finger.second.getId()), finger.second.x, finger.second.y);
             }
         }
     }
@@ -422,42 +422,7 @@ void ofApp::ImageProcessing() {
 
 void ofApp::updateBlobTracker() {
     if (matReady) {
-        fingerPoints_cv.clear();
-        fingerPoints.clear();
-        std::vector<cv::Point2f> fingersTmp;
-        
-        // From blobTracker to Camera View
-        for (int i = 0; i < blobTracker.size(); i++) {
-            float pt_x = blobTracker[i].centroid.x * 640.0f;
-            float pt_y = blobTracker[i].centroid.y * 480.0f;
-            if (blobTracker[i].boundingRect.width > fingerSizeThreshold || blobTracker[i].boundingRect.height > fingerSizeThreshold) {
-                continue;
-            }
-            
-            if (blobTracker[i].boundingRect.width < fingerSizeLowerThreshold || blobTracker[i].boundingRect.height < fingerSizeLowerThreshold) {
-                continue;
-            }
-            fingerPoints.push_back(YJ::Finger{ pt_x, pt_y, blobTracker[i].id });
-            fingerPoints_cv.push_back(YJ::Finger{ pt_x, pt_y, blobTracker[i].id });
-            fingersTmp.push_back(YJ::Finger{ pt_x, pt_y, blobTracker[i].id });
-        }
-        
-        
-        
-        
-        // From Camera View to Projector View
-        if (!fingerPoints.empty() && calibrationDone) {
-            cv::transform(fingersTmp, fingersTmp, warpMat);
-            
-            for (int i = 0; i < fingerPoints.size(); i++) {
-                cv::Point2f point = fingersTmp[i];
-                fingerPoints[i].x = point.x;
-                fingerPoints[i].y = point.y;
-            }
-        }
-    }
-
-    
+    }    
 }
 
 
@@ -482,32 +447,89 @@ void ofApp::updateFidMarker() {
             corners.pop_back();
             YJ::Marker newMarker {corners, t_center, fiducial->getAngleDeg(), fiducial->fidId};
 #ifdef DEBUG
-            std::cout << newMarker.toJSON().toStyledString() << std::endl;
+//            std::cout << newMarker.toJSON().toStyledString() << std::endl;
 #endif
             markers.push_back(newMarker);
         }
     }
 }
 
+cv::Point2f ofApp::transformPoint(cv::Point2f pt) {
+    
+    std::vector<cv::Point2f> transPts { pt };
+    cv::transform(transPts, transPts, warpMat);
+    return transPts[0];
+}
+
 // Blob Tracker
-void ofApp::blobAdded(ofxBlob &_blob){
+void ofApp::blobAdded(ofxBlob &_blob) {
 #ifdef DEBUG
-    ofLog(OF_LOG_NOTICE, "Blob ID " + ofToString(_blob.id) + " added" );
-    YJ::Finger f { cv::Point2f{ _blob.centroid.x, _blob.centroid.y }, _blob.id };
-    std::cout << f.toJSON().toStyledString() << std::endl;
+//    ofLog(OF_LOG_NOTICE, "Blob ID " + ofToString(_blob.id) + " added" );
 #endif
+    
+    if (matReady) {
+        // Noisy points
+        if (_blob.boundingRect.width > fingerSizeThreshold
+            || _blob.boundingRect.height > fingerSizeThreshold) {
+            // Do nothing
+            return;
+        }
+        
+        if (_blob.boundingRect.width < fingerSizeLowerThreshold
+            || _blob.boundingRect.height < fingerSizeLowerThreshold) {
+            return;
+        }
+        
+        cv::Point2f pt { _blob.centroid.x * 640.0f, _blob.centroid.y * 480.0f };
+        
+        cv::Point2f tPt = transformPoint(pt);
+        
+        fingerPoints[_blob.id] = YJ::Finger (tPt.x, tPt.y, _blob.id, 1 );
+        fingerPoints_cv[_blob.id] = YJ::Finger { pt.x, pt.y, _blob.id, 1 };
+        
+    }
+    
 }
 
-void ofApp::blobMoved(ofxBlob &_blob){
+void ofApp::blobMoved(ofxBlob &_blob) {
 #ifdef DEBUG
-    ofLog(OF_LOG_NOTICE, "Blob ID " + ofToString(_blob.id) + " moved" );
+//    ofLog(OF_LOG_NOTICE, "Blob ID " + ofToString(_blob.id) + " moved" );
 #endif
+    
+    if (matReady) {
+        // Noisy points
+        if (_blob.boundingRect.width > fingerSizeThreshold
+            || _blob.boundingRect.height > fingerSizeThreshold) {
+            // Do nothing
+            return;
+        }
+        
+        if (_blob.boundingRect.width < fingerSizeLowerThreshold
+            || _blob.boundingRect.height < fingerSizeLowerThreshold) {
+            return;
+        }
+        
+        cv::Point2f pt { _blob.centroid.x * 640.0f, _blob.centroid.y * 480.0f };
+        
+        cv::Point2f tPt = transformPoint(pt);
+        
+        fingerPoints[_blob.id] = YJ::Finger { tPt.x, tPt.y, _blob.id, 2 };
+        fingerPoints_cv[_blob.id] = YJ::Finger { pt.x, pt.y, _blob.id, 2 };
+        
+    }
 }
 
-void ofApp::blobDeleted(ofxBlob &_blob){
+void ofApp::blobDeleted(ofxBlob &_blob) {
 #ifdef DEBUG
-    ofLog(OF_LOG_NOTICE, "Blob ID " + ofToString(_blob.id) + " deleted" );
+//    ofLog(OF_LOG_NOTICE, "Blob ID " + ofToString(_blob.id) + " deleted" );
 #endif
+    
+    if (matReady) {
+        if (fingerPoints.count(_blob.id) == 1) {
+            fingerPoints.at(_blob.id).setAction(3);
+            fingerPoints_cv.at(_blob.id).setAction(3);
+        }
+    }
 }
 
 

@@ -6,9 +6,12 @@
 #include "ofxCv.h"
 #include "ofxBlobTracker.h"
 #include "ofxFidMain.h"
-#include "ofxSyphon.h"
+//#include "ofxSyphon.h"
+#include "ofxNetwork.h"
 #include "Trackers/finger.h"
 #include "Trackers/marker.h"
+#include "json/json.h"
+#include <map>
 
 class ofApp : public ofBaseApp{
 public:
@@ -72,8 +75,8 @@ private:
     ofxBlobTracker blobTracker;
     float fingerSizeThreshold;
     float fingerSizeLowerThreshold;
-    std::vector<YJ::Finger> fingerPoints;
-    std::vector<YJ::Finger> fingerPoints_cv;
+    std::map<int, YJ::Finger> fingerPoints;
+    std::map<int, YJ::Finger> fingerPoints_cv;
     
     // --- Functions ----
     // -- Listener --
@@ -81,7 +84,9 @@ private:
     void blobMoved(ofxBlob &_blob);
     void blobDeleted(ofxBlob &_blob);
     // -- Others --
+    cv::Point2f transformPoint(cv::Point2f pt);
     void updateBlobTracker();
+    
     
     
     // Fiducial Tracking
