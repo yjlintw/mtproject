@@ -77,6 +77,7 @@ private:
     float fingerSizeLowerThreshold;
     std::map<int, YJ::Finger> fingerPoints;
     std::map<int, YJ::Finger> fingerPoints_cv;
+    bool fingerDirty;
     
     // --- Functions ----
     // -- Listener --
@@ -92,9 +93,14 @@ private:
     // Fiducial Tracking
     // --- Variables ---
     ofxFiducialTracker fidfinder;
-    std::vector<YJ::Marker> markers;
+//    std::vector<YJ::Marker> markers;
+    std::map<int, YJ::Marker> markers;
     // --- Functions ---
     void updateFidMarker(); // Transform from camera view to projection view
+    bool markerDirty;
+    void markerAdded(YJ::Marker& marker);
+    void markerMoved(YJ::Marker& marker);
+    void markerDeleted(YJ::Marker& marker);
     
     
     

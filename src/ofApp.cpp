@@ -1,4 +1,5 @@
 #include "ofApp.h"
+#include <set>
 
 
 //----------- TODO --------------
@@ -60,6 +61,10 @@ void ofApp::setup(){
     fidfinder.minFingerSize = 1;
     fidfinder.fingerSensitivity = 0.05f;
     
+    //
+    fingerDirty = false;
+    markerDirty = false;
+    
     // Syphon
 //    mainOutputSyphonServer.setName("Screen Output");
 //    
@@ -118,17 +123,23 @@ void ofApp::update(){
 
 void ofApp::sendMsg() {
     Json::Value root;
-    for (auto item : fingerPoints) {
-        root["fingers"][std::to_string(item.first)] = item.second.toJSON();
+    if (fingerDirty) {
+        for (auto item : fingerPoints) {
+            root["fingers"][std::to_string(item.first)] = item.second.toJSON();
+        }
+        fingerDirty = false;
     }
     
-    for (int i = 0; i < markers.size(); i++) {
-        root["markers"][i] = markers[i].toJSON();
+    if (markerDirty) {
+        for (auto item: markers) {
+            root["markers"][std::to_string(item.first)] = item.second.toJSON();
+        }
+        markerDirty = false;
     }
     
     if (!root.isNull()) {
 #ifdef DEBUG
-//        std::cout << root.toStyledString() << std::endl;
+        std::cout << root.toStyledString() << std::endl;
 #endif
         Json::FastWriter writer;
         std::string output = writer.write(root);
@@ -146,6 +157,14 @@ void ofApp::sendMsg() {
     for (auto it = fingerPoints_cv.begin(); it != fingerPoints_cv.end(); ) {
         if (it->second.getAction() == 3) {
             it = fingerPoints_cv.erase(it);
+        } else {
+            it++;
+        }
+    }
+    
+    for (auto it = markers.begin(); it != markers.end(); ) {
+        if (it->second.getAction() == 3) {
+            it = markers.erase(it);
         } else {
             it++;
         }
@@ -210,14 +229,14 @@ void ofApp::drawMarkers() {
     if (matReady) {
         for (auto marker : markers) {
             ofPolyline line;
-            line.addVertex(marker.corners[0].x, marker.corners[0].y);
-            line.addVertex(marker.corners[1].x, marker.corners[1].y);
-            line.addVertex(marker.corners[2].x, marker.corners[2].y);
-            line.addVertex(marker.corners[3].x, marker.corners[3].y);
+            line.addVertex(marker.second.corners[0].x, marker.second.corners[0].y);
+            line.addVertex(marker.second.corners[1].x, marker.second.corners[1].y);
+            line.addVertex(marker.second.corners[2].x, marker.second.corners[2].y);
+            line.addVertex(marker.second.corners[3].x, marker.second.corners[3].y);
             line.close();
             ofSetColor(255, 255, 0);
             line.draw();
-            ofDrawCircle(marker.center.x, marker.center.y, 100);
+            ofDrawCircle(marker.second.center.x, marker.second.center.y, 100);
         }
     }
 }
@@ -481,7 +500,7 @@ void ofApp::updateBlobTracker() {
 void ofApp::updateFidMarker() {
     // get fiducial info
     if (calibrationDone) {
-        markers.clear();
+        std::set<int> currentIds {};
         for (list<ofxFiducial>::iterator fiducial = fidfinder.fiducialsList.begin(); fiducial != fidfinder.fiducialsList.end(); fiducial++) {
             fiducial->computeCorners();
             
@@ -500,11 +519,55 @@ void ofApp::updateFidMarker() {
             YJ::Marker newMarker {corners, t_center, fiducial->getAngleDeg(), fiducial->fidId};
 #ifdef DEBUG
 //            std::cout << newMarker.toJSON().toStyledString() << std::endl;
-#endif
-            markers.push_back(newMarker);
+#endif      
+            currentIds.insert(fiducial->fidId);
+            // check Add or moved
+            
+            if ( markers.count(fiducial->fidId) > 0 ) {
+                // Moved
+                newMarker.setAction(2);
+                markerMoved( newMarker );
+            } else {
+                newMarker.setAction(1);
+                markerAdded( newMarker );
+            }
+            
+            
         }
+        
+        // Check if an marker is removed
+        for (auto marker : markers) {
+            if( currentIds.count(marker.first) == 0 ) {
+                markerDeleted(marker.second);
+            }
+        }
+        
     }
 }
+
+void ofApp::markerAdded(YJ::Marker& marker) {
+    markerDirty = true;
+    markers[marker.getId()] = marker;
+    
+}
+void ofApp::markerMoved(YJ::Marker& marker) {
+    
+    YJ::Marker oldMarker = markers[marker.getId()];
+    float&& dx = oldMarker.center.x - marker.center.x;
+    float&& dy = oldMarker.center.y - marker.center.y;
+    float dangle = abs(oldMarker.angle - marker.angle);
+    float dist = dx * dx + dy * dy;
+    if (dist > 10  || dangle > 1) {
+        markerDirty = true;
+        markers[marker.getId()] = marker;
+        
+    }
+}
+void ofApp::markerDeleted(YJ::Marker& marker) {
+    markers[marker.getId()].setAction(3);
+    markerDirty = true;
+}
+
 
 cv::Point2f ofApp::transformPoint(cv::Point2f pt) {
     
@@ -516,7 +579,7 @@ cv::Point2f ofApp::transformPoint(cv::Point2f pt) {
 // Blob Tracker
 void ofApp::blobAdded(ofxBlob &_blob) {
 #ifdef DEBUG
-//    ofLog(OF_LOG_NOTICE, "Blob ID " + ofToString(_blob.id) + " added" );
+    ofLog(OF_LOG_NOTICE, "Blob ID " + ofToString(_blob.id) + " added" );
 #endif
     
     if (matReady) {
@@ -538,6 +601,7 @@ void ofApp::blobAdded(ofxBlob &_blob) {
         
         fingerPoints[_blob.id] = YJ::Finger (tPt.x, tPt.y, _blob.id, 1 );
         fingerPoints_cv[_blob.id] = YJ::Finger { pt.x, pt.y, _blob.id, 1 };
+        fingerDirty = true;
         
     }
     
@@ -567,6 +631,7 @@ void ofApp::blobMoved(ofxBlob &_blob) {
         
         fingerPoints[_blob.id] = YJ::Finger { tPt.x, tPt.y, _blob.id, 2 };
         fingerPoints_cv[_blob.id] = YJ::Finger { pt.x, pt.y, _blob.id, 2 };
+        fingerDirty = true;
         
     }
 }
@@ -580,6 +645,7 @@ void ofApp::blobDeleted(ofxBlob &_blob) {
         if (fingerPoints.count(_blob.id) == 1) {
             fingerPoints.at(_blob.id).setAction(3);
             fingerPoints_cv.at(_blob.id).setAction(3);
+            fingerDirty = true;
         }
     }
 }

@@ -8,9 +8,10 @@
 namespace YJ {
     class Marker {
     public:
-        Marker();
-        Marker(std::vector<cv::Point2f> in_cs, cv::Point2f in_center, double in_ang, int in_id) : corners { in_cs },
-            center { in_center }, angle { in_ang }, id { in_id }
+        Marker() : corners { std::vector<cv::Point2f>{} }, center { cv::Point2f{0, 0} }, angle { 0 }, id { -1 }, action { 0 }
+        {}
+        Marker(std::vector<cv::Point2f> in_cs, cv::Point2f in_center, double in_ang, int in_id, int in_action = 0) : corners { in_cs },
+        center { in_center }, angle { in_ang }, id { in_id }, action { in_action }
         { }
         
         Marker(Json::Value jo) {
@@ -24,6 +25,7 @@ namespace YJ {
             }
             
             angle = jo["angle"].asFloat();
+            action = jo["action"].asInt();
                 
         }
         
@@ -33,6 +35,14 @@ namespace YJ {
         
         int getId() {
             return id;
+        }
+        
+        int getAction() {
+            return action;
+        }
+        
+        int setAction(int act) {
+            action = act;
         }
         
         Json::Value toJSON() {
@@ -47,10 +57,12 @@ namespace YJ {
             }
             
             result["angle"] = angle;
+            result["action"] = action;
             return result;
         }
     private:
         int id;
+        int action; // 0: present, 1: Add, 2: Move, 3: Remove
     };
 }
 
